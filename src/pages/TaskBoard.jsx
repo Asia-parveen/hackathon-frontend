@@ -3,7 +3,7 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';  // Import Toastify CSS
 
-const apiUrl = import.meta.env.VITE_API_URL;
+const myapiUrl = import.meta.env.VITE_API_URL;
 
 const TaskBoard = () => {
   const [tasks, setTasks] = useState([]);
@@ -19,7 +19,7 @@ const TaskBoard = () => {
 
   const fetchTasks = async () => {
     try {
-      const response = await axios.get(`${apiUrl}/api/tasks`);
+      const response = await axios.get(`${ myapiUrl }/api/tasks`);
       setTasks(response.data);
       console.log('Fetched tasks:', response.data);  // Log the fetched tasks
     } catch (error) {
@@ -39,7 +39,7 @@ const TaskBoard = () => {
     };
 
     try {
-      const response = await axios.post(`${apiUrl}/api/tasks`, newTask);
+      const response = await axios.post(`${ myapiUrl }/api/tasks`, newTask);
       setNewTaskTitle('');
       setNewTaskDescription('');
       fetchTasks();
@@ -53,7 +53,7 @@ const TaskBoard = () => {
 
   const deleteTask = async (id) => {
     try {
-      await axios.delete(`${apiUrl}/api/tasks/${id}`);
+      await axios.delete(`${ myapiUrl }/api/tasks/${id}`);
       fetchTasks();
       toast.success('Task deleted successfully!');
       console.log('Task deleted:', id);  // Log the task deletion
@@ -65,7 +65,7 @@ const TaskBoard = () => {
 
   const updateTask = async (id, updatedFields) => {
     try {
-      await axios.put(`${apiUrl}/api/tasks/${id}`, updatedFields);
+      await axios.put(`${ myapiUrl }/api/tasks/${id}`, updatedFields);
       fetchTasks();
       toast.success('Task updated successfully!');
       console.log('Task updated:', id, updatedFields);  // Log task update

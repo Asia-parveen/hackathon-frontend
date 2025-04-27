@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import axios from 'axios';
 
+const myapiUrl = import.meta.env.VITE_API_URL;
+
 // TaskCard Component: Displays individual task details
 const TaskCard = ({ task, onDelete, onEdit }) => {
   return (
@@ -36,7 +38,7 @@ const TaskBoard = () => {
 
   const fetchTasks = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/tasks'); // Ensure the URL is correct
+      const response = await axios.get('${ myapiUrl}/api/tasks'); // Ensure the URL is correct
       const tasksData = response.data;
       const categorizedTasks = categorizeTasks(tasksData);
       setTasks(categorizedTasks);
@@ -62,7 +64,7 @@ const TaskBoard = () => {
 
     const updatedTask = { ...removed, status: destination.droppableId };
     try {
-      await axios.put(`http://localhost:5000/api/tasks/${updatedTask._id}`, updatedTask); // Ensure correct URL
+      await axios.put(`${ myapiUrl}/api/tasks/${updatedTask._id}`, updatedTask); // Ensure correct URL
       fetchTasks();  // Refresh tasks after drag-and-drop update
     } catch (error) {
       console.error('Error updating task status:', error);
@@ -80,7 +82,7 @@ const TaskBoard = () => {
   const handleCreateTask = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/tasks', newTask); // Ensure correct URL
+      const response = await axios.post('${ myapiUrl }/api/tasks', newTask); // Ensure correct URL
       const createdTask = response.data;
 
       setTasks((prev) => {
@@ -97,7 +99,7 @@ const TaskBoard = () => {
 
   const handleDeleteTask = async (taskId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/tasks/${taskId}`); // Ensure correct URL
+      await axios.delete(`${ myapiUrl }/api/tasks/${taskId}`); // Ensure correct URL
       fetchTasks(); // Refresh tasks after delete
     } catch (error) {
       console.error('Error deleting task:', error);

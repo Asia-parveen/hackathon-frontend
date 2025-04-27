@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import axios from 'axios';
 
 const myapiUrl = import.meta.env.VITE_API_URL;
@@ -33,12 +32,12 @@ const TaskBoard = () => {
   });
 
   useEffect(() => {
-    fetchTasks();  // Fetch tasks on page load
+    fetchTasks();
   }, []);
 
   const fetchTasks = async () => {
     try {
-      const response = await axios.get('${ myapiUrl}/api/tasks'); // Ensure the URL is correct
+      const response = await axios.get(`${myapiUrl}/api/tasks`);
       const tasksData = response.data;
       const categorizedTasks = categorizeTasks(tasksData);
       setTasks(categorizedTasks);
@@ -55,22 +54,6 @@ const TaskBoard = () => {
     return categorized;
   };
 
-  const handleDragEnd = async (result) => {
-    const { source, destination } = result;
-    if (!destination) return;
-
-    const [removed] = tasks[source.droppableId].splice(source.index, 1);
-    tasks[destination.droppableId].splice(destination.index, 0, removed);
-
-    const updatedTask = { ...removed, status: destination.droppableId };
-    try {
-      await axios.put(`${ myapiUrl}/api/tasks/${updatedTask._id}`, updatedTask); // Ensure correct URL
-      fetchTasks();  // Refresh tasks after drag-and-drop update
-    } catch (error) {
-      console.error('Error updating task status:', error);
-    }
-  };
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewTask((prev) => ({
@@ -82,16 +65,16 @@ const TaskBoard = () => {
   const handleCreateTask = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('${ myapiUrl }/api/tasks', newTask); // Ensure correct URL
+      const response = await axios.post(`${myapiUrl}/api/tasks`, newTask);
       const createdTask = response.data;
 
       setTasks((prev) => {
         const updatedTasks = { ...prev };
-        updatedTasks[newTask.status].push(createdTask); // Add to the correct status column
+        updatedTasks[newTask.status].push(createdTask);
         return updatedTasks;
       });
 
-      setNewTask({ title: '', description: '', assignedTo: '', status: 'todo' }); // Reset form
+      setNewTask({ title: '', description: '', assignedTo: '', status: 'todo' });
     } catch (error) {
       console.error('Error creating task:', error);
     }
@@ -99,8 +82,8 @@ const TaskBoard = () => {
 
   const handleDeleteTask = async (taskId) => {
     try {
-      await axios.delete(`${ myapiUrl }/api/tasks/${taskId}`); // Ensure correct URL
-      fetchTasks(); // Refresh tasks after delete
+      await axios.delete(`${myapiUrl}/api/tasks/${taskId}`);
+      fetchTasks();
     } catch (error) {
       console.error('Error deleting task:', error);
     }
@@ -158,46 +141,33 @@ const TaskBoard = () => {
       </form>
 
       {/* Task Board */}
-      <DragDropContext onDragEnd={handleDragEnd}>
-        <div className="flex gap-8">
-          {['todo', 'inProgress', 'done'].map((status) => (
-            <Droppable key={status} droppableId={status}>
-              {(provided) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                  className={`bg-${status === 'todo' ? 'blue' : status === 'inProgress' ? 'yellow' : 'green'}-100 p-4 rounded-md w-1/3`}
-                >
-                  <h3 className="text-2xl font-semibold mb-4 capitalize">
-                    {status.replace(/([A-Z])/g, ' $1')}
-                  </h3>
-                  {tasks[status].map((task, index) => (
-                    <Draggable key={task._id} draggableId={task._id} index={index}>
-                      {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          className="bg-white p-4 mb-3 rounded-md shadow-md"
-                          style={{ ...provided.draggableProps.style }}
-                        >
-                          <TaskCard task={task} onDelete={handleDeleteTask} onEdit={handleEditTask} />
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          ))}
-        </div>
-      </DragDropContext>
+      <div className="flex gap-8">
+        {['todo', 'inProgress', 'done'].map((status) => (
+          <div
+            key={status}
+            className={`bg-${status === 'todo' ? 'blue' : status === 'inProgress' ? 'yellow' : 'green'}-100 p-4 rounded-md w-1/3`}
+          >
+            <h3 className="text-2xl font-semibold mb-4 capitalize">
+              {status.replace(/([A-Z])/g, ' $1')}
+            </h3>
+
+            {tasks[status].map((task) => (
+              <TaskCard
+                key={task._id}
+                task={task}
+                onDelete={handleDeleteTask}
+                onEdit={handleEditTask}
+              />
+            ))}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
 
 export default TaskBoard;
+
 
 
 

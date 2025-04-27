@@ -22,7 +22,7 @@ const Signup = () => {
     e.preventDefault();
   
     try {
-      const res = await fetch(`${myapiUrl}/api/auth/signup`, { // No space here!
+      const res = await fetch(`${myapiUrl}/auth/signup`, { // No space here!
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

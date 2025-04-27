@@ -19,7 +19,7 @@ const TaskBoard = () => {
 
   const fetchTasks = async () => {
     try {
-      const response = await axios.get(`${myapiUrl}/api/tasks`);
+      const response = await axios.get(`${myapiUrl}/tasks`);
       setTasks(response.data);
       console.log('Fetched tasks:', response.data);  // Log the fetched tasks
     } catch (error) {
@@ -39,7 +39,7 @@ const TaskBoard = () => {
     };
 
     try {
-      const response = await axios.post(`${myapiUrl}/api/tasks`, newTask);
+      const response = await axios.post(`${myapiUrl}/tasks`, newTask);
       setNewTaskTitle('');
       setNewTaskDescription('');
       fetchTasks();
@@ -53,7 +53,7 @@ const TaskBoard = () => {
 
   const deleteTask = async (id) => {
     try {
-      await axios.delete(`${myapiUrl}/api/tasks/${id}`);
+      await axios.delete(`${myapiUrl}/tasks/${id}`);
       fetchTasks();
       toast.success('Task deleted successfully!');
       console.log('Task deleted:', id);  // Log the task deletion
@@ -65,7 +65,7 @@ const TaskBoard = () => {
 
   const updateTask = async (id, updatedFields) => {
     try {
-      await axios.put(`${myapiUrl}/api/tasks/${id}`, updatedFields);
+      await axios.put(`${myapiUrl}/tasks/${id}`, updatedFields);
       fetchTasks();
       toast.success('Task updated successfully!');
       console.log('Task updated:', id, updatedFields);  // Log task update

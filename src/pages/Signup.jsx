@@ -20,24 +20,29 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
     try {
-      const res = await fetch(`${ myapiUrl} /api/auth/signup`, {
+      const res = await fetch(`${myapiUrl}/api/auth/signup`, { // No space here!
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-      const data = await res.json();
-      if (res.ok) {
-        alert("Signup successful!");
-        window.location.href = "/login";
-      } else {
-        alert(data.message || "Signup failed.");
+  
+      if (!res.ok) {
+        const errorData = await res.json(); // Capture the error details
+        alert(errorData.message || "Signup failed.");
+        return;
       }
+  
+      const data = await res.json();
+      alert("Signup successful!");
+      window.location.href = "/login";
     } catch (err) {
-      console.error(err);
-      alert("Something went wrong!");
+      console.error("Error during fetch:", err); // Log detailed error
+      alert("Something went wrong! Please try again.");
     }
   };
+  
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">

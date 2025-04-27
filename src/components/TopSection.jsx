@@ -8,13 +8,13 @@ const TopSection = () => {
         <ul className="space-y-4">
           {/* Task Items */}
           <li className="text-lg text-gray-700 border-l-4 border-blue-500 pl-4">
-            Task 1: Complete project documentation
+            Task 1: What have to going to do
           </li>
           <li className="text-lg text-gray-700 border-l-4 border-blue-500 pl-4">
-            Task 2: Attend team meeting at 2 PM
+            Task 2: Add new Exciting Task
           </li>
           <li className="text-lg text-gray-700 border-l-4 border-blue-500 pl-4">
-            Task 3: Review pull requests
+            Task 3: can update, save and delete task
           </li>
         </ul>
       </div>

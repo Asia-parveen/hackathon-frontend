@@ -19,13 +19,20 @@ const TaskBoard = () => {
 
   const fetchTasks = async () => {
     try {
-      const response = await axios.get(`${myapiUrl}/tasks`);
-      setTasks(response.data);
-      console.log('Fetched tasks:', response.data);  // Log the fetched tasks
+      console.log('API URL:', `${myapiUrl}/api/tasks`); // Log the API URL to verify
+      const response = await axios.get(`${myapiUrl}/api/tasks`);
+      console.log('Fetched tasks:', response.data);  // Log the data received from the API
+      if (response.data && Array.isArray(response.data)) {
+        setTasks(response.data);  // Ensure that the data is an array
+      } else {
+        console.error('Unexpected data format:', response.data);  // Log unexpected data format
+      }
     } catch (error) {
-      console.error('Error fetching tasks:', error);
+      console.error('Error fetching tasks:', error);  // Log error if fetching fails
     }
   };
+  
+  
 
   const createTask = async (e) => {
     e.preventDefault();
